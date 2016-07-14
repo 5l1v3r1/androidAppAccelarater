@@ -5,22 +5,7 @@ from scipy import signal
 from collections import deque
 import sys 
 
-def calibration(gravity,accelaration):
-    alpha = 0.8
-    gravity = alpha * gravity +(1 - alpha) * accelaration
-    linear_accelaration = accelaration - gravity
-    return linear_accelaration
-
-
-    
-
-def get_gravity(sample):
-    cal_data = reduce(lambda x,y:x + y,sample)/len(sample)
-    return cal_data
-
-
-
-if __name__ == '__main__':
+def main():
     argvs = sys.argv 
     f = open(argvs[1])
 
@@ -35,9 +20,23 @@ if __name__ == '__main__':
     gravity = np.array([get_gravity(i[:300]) for i in accelaration])
     linear_accelaration = np.array([[calibration(g,i) for i in list ]for list,g in zip(accelaration,gravity)])
     
-     
+    return accelaration,linear_accelaration
+
+def calibration(gravity,accelaration):
+    alpha = 0.8
+    gravity = alpha * gravity +(1 - alpha) * accelaration
+    linear_accelaration = accelaration - gravity
+    return linear_accelaration
 
 
+    
+
+def get_gravity(sample):
+    cal_data = reduce(lambda x,y:x + y,sample)/len(sample)
+    return cal_data
+
+if __name__ == '__main__':
+    accelaration, linear_accelaration = main()
 
     plt.hold(True)
     plt.ylim([-15,15])
