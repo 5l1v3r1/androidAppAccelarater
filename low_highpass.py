@@ -19,21 +19,28 @@ def main():
     accelaration = np.array([array[::4],array[1::4],array[2::4]] )
     gravity = np.array([get_gravity(i[:300]) for i in accelaration])
     linear_accelaration = np.array([[calibration(g,i) for i in list ]for list,g in zip(accelaration,gravity)])
-    
+    for i in gravity:
+        print i
+
     return accelaration,linear_accelaration
+
 
 def calibration(gravity,accelaration):
     alpha = 0.8
     gravity = alpha * gravity +(1 - alpha) * accelaration
     linear_accelaration = accelaration - gravity
+
     return linear_accelaration
 
 
-    
-
 def get_gravity(sample):
     cal_data = reduce(lambda x,y:x + y,sample)/len(sample)
+
     return cal_data
+
+# def rotation(gravity):
+
+
 
 if __name__ == '__main__':
     accelaration, linear_accelaration = main()
